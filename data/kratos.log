@@ -1,0 +1,581 @@
+2026-02-22 09:41:52.500 | INFO     | __main__:<module>:38 - Initializing database...
+2026-02-22 09:41:54.526 | INFO     | app.voice.stt_stream:__init__:9 - Initializing Whisper model: small on cuda
+2026-02-22 09:45:34.071 | INFO     | app.memory.embeddings:__init__:8 - Loading embedding model: all-MiniLM-L6-v2
+2026-02-22 09:45:44.834 | INFO     | app.agent.orchestrator:run:25 - Kratos Orchestrator started. Speak now.
+2026-02-22 09:45:44.834 | INFO     | app.voice.audio_stream:stream:23 - Starting microphone stream (16000 Hz)...
+2026-02-22 09:46:09.740 | ERROR    | __main__:run_voice_loop:34 - Orchestrator failed: mkl_malloc: failed to allocate memory
+Traceback (most recent call last):
+
+  File "D:\Kratos_Desk\app\main.py", line 47, in <module>
+    asyncio.run(run_voice_loop())
+    │       │   └ <function run_voice_loop at 0x000001E8D80AF060>
+    │       └ <function run at 0x000001E829BFAA20>
+    └ <module 'asyncio' from 'C:\\Python312\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Python312\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           │      │   └ <coroutine object run_voice_loop at 0x000001E80DB0CF20>
+           │      └ <function Runner.run at 0x000001E829D0A700>
+           └ <asyncio.runners.Runner object at 0x000001E80C466D20>
+  File "C:\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<run_voice_loop() running at D:\Kratos_Desk\app\main.py:34> cb=[_run_until_complete_cb() at ...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x000001E829D08360>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x000001E80C466D20>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 674, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x000001E829DAB100>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "C:\Python312\Lib\asyncio\base_events.py", line 641, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x000001E829D0A0C0>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 1986, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x000001E829BF02C0>
+    └ <Handle Task.task_wakeup(<Future finis...cate memory')>)>
+  File "C:\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...cate memory')>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...cate memory')>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...cate memory')>)>
+
+> File "D:\Kratos_Desk\app\main.py", line 29, in run_voice_loop
+    await orchestrator.run()
+          │            └ <function KratosOrchestrator.run at 0x000001E861DF40E0>
+          └ <app.agent.orchestrator.KratosOrchestrator object at 0x000001E80C632540>
+
+  File "D:\Kratos_Desk\app\agent\orchestrator.py", line 48, in run
+    text = await self.stt.transcribe_chunk(full_audio)
+                 │    │   │                └ array([[ 0.0000000e+00],
+                 │    │   │                         [ 0.0000000e+00],
+                 │    │   │                         [-3.0517578e-05],
+                 │    │   │                         ...,
+                 │    │   │                         [ 0.0000000e+00],
+                 │    │   │                         [ 0.00...
+                 │    │   └ <function StreamingTranscriber.transcribe_chunk at 0x000001E85A5BDE40>
+                 │    └ <app.voice.stt_stream.StreamingTranscriber object at 0x000001E80DA30860>
+                 └ <app.agent.orchestrator.KratosOrchestrator object at 0x000001E80C632540>
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 27, in transcribe_chunk
+    segments, info = await loop.run_in_executor(
+                           │    └ <function BaseEventLoop.run_in_executor at 0x000001E829D08C20>
+                           └ <ProactorEventLoop running=True closed=False debug=False>
+
+  File "C:\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │        │            └ None
+             │        └ None
+             └ None
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 29, in <lambda>
+    lambda: self.model.transcribe(audio_buffer, beam_size=5)
+            │    │     │          └ array([[ 0.0000000e+00],
+            │    │     │                   [ 0.0000000e+00],
+            │    │     │                   [-3.0517578e-05],
+            │    │     │                   ...,
+            │    │     │                   [ 0.0000000e+00],
+            │    │     │                   [ 0.00...
+            │    │     └ <function WhisperModel.transcribe at 0x000001E861C47D80>
+            │    └ <faster_whisper.transcribe.WhisperModel object at 0x000001E80DA0BE60>
+            └ <app.voice.stt_stream.StreamingTranscriber object at 0x000001E80DA30860>
+
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 942, in transcribe
+    ) = self.detect_language(
+        │    └ <function WhisperModel.detect_language at 0x000001E861C642C0>
+        └ <faster_whisper.transcribe.WhisperModel object at 0x000001E80DA0BE60>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1819, in detect_language
+    encoder_output = self.encode(
+                     │    └ <function WhisperModel.encode at 0x000001E861C47F60>
+                     └ <faster_whisper.transcribe.WhisperModel object at 0x000001E80DA0BE60>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1400, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           │    │     │      │                └ False
+           │    │     │      └ <unprintable StorageView object>
+           │    │     └ <instancemethod encode at 0x000001E855B03730>
+           │    └ <ctranslate2._ext.Whisper object at 0x000001E80DC6F870>
+           └ <faster_whisper.transcribe.WhisperModel object at 0x000001E80DA0BE60>
+
+RuntimeError: mkl_malloc: failed to allocate memory
+2026-02-22 09:47:22.750 | INFO     | __main__:<module>:38 - Initializing database...
+2026-02-22 09:47:24.765 | INFO     | app.voice.stt_stream:__init__:9 - Initializing Whisper model: small on cuda
+2026-02-22 09:47:25.787 | INFO     | app.memory.embeddings:__init__:8 - Loading embedding model: all-MiniLM-L6-v2
+2026-02-22 09:47:29.204 | INFO     | app.agent.orchestrator:run:25 - Kratos Orchestrator started. Speak now.
+2026-02-22 09:47:29.204 | INFO     | app.voice.audio_stream:stream:23 - Starting microphone stream (16000 Hz)...
+2026-02-22 09:47:31.173 | ERROR    | __main__:run_voice_loop:34 - Orchestrator failed: Library cublas64_12.dll is not found or cannot be loaded
+Traceback (most recent call last):
+
+  File "D:\Kratos_Desk\app\main.py", line 47, in <module>
+    asyncio.run(run_voice_loop())
+    │       │   └ <function run_voice_loop at 0x00000265FAA6F100>
+    │       └ <function run at 0x00000265FD2CAA20>
+    └ <module 'asyncio' from 'C:\\Python312\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Python312\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           │      │   └ <coroutine object run_voice_loop at 0x00000265E27CCF20>
+           │      └ <function Runner.run at 0x00000265FE98A700>
+           └ <asyncio.runners.Runner object at 0x00000265E2653E60>
+  File "C:\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<run_voice_loop() running at D:\Kratos_Desk\app\main.py:34> cb=[_run_until_complete_cb() at ...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x00000265FE988360>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x00000265E2653E60>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 674, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x00000265FEA3B100>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "C:\Python312\Lib\asyncio\base_events.py", line 641, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x00000265FE98A0C0>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 1986, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x00000265FD2C02C0>
+    └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+  File "C:\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+
+> File "D:\Kratos_Desk\app\main.py", line 29, in run_voice_loop
+    await orchestrator.run()
+          │            └ <function KratosOrchestrator.run at 0x00000265B6B10180>
+          └ <app.agent.orchestrator.KratosOrchestrator object at 0x00000265E24700B0>
+
+  File "D:\Kratos_Desk\app\agent\orchestrator.py", line 48, in run
+    text = await self.stt.transcribe_chunk(full_audio)
+                 │    │   │                └ array([ 0.0000000e+00,  0.0000000e+00, -3.0517578e-05, ...,
+                 │    │   │                          0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
+                 │    │   │                        sha...
+                 │    │   └ <function StreamingTranscriber.transcribe_chunk at 0x00000265AF2DDEE0>
+                 │    └ <app.voice.stt_stream.StreamingTranscriber object at 0x00000265FAA71670>
+                 └ <app.agent.orchestrator.KratosOrchestrator object at 0x00000265E24700B0>
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 27, in transcribe_chunk
+    segments, info = await loop.run_in_executor(
+                           │    └ <function BaseEventLoop.run_in_executor at 0x00000265FE988C20>
+                           └ <ProactorEventLoop running=True closed=False debug=False>
+
+  File "C:\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │        │            └ None
+             │        └ None
+             └ None
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 29, in <lambda>
+    lambda: self.model.transcribe(audio_buffer, beam_size=5)
+            │    │     │          └ array([ 0.0000000e+00,  0.0000000e+00, -3.0517578e-05, ...,
+            │    │     │                    0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
+            │    │     │                  sha...
+            │    │     └ <function WhisperModel.transcribe at 0x00000265B6963E20>
+            │    └ <faster_whisper.transcribe.WhisperModel object at 0x00000265FAA71400>
+            └ <app.voice.stt_stream.StreamingTranscriber object at 0x00000265FAA71670>
+
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 942, in transcribe
+    ) = self.detect_language(
+        │    └ <function WhisperModel.detect_language at 0x00000265B6984360>
+        └ <faster_whisper.transcribe.WhisperModel object at 0x00000265FAA71400>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1819, in detect_language
+    encoder_output = self.encode(
+                     │    └ <function WhisperModel.encode at 0x00000265B6984040>
+                     └ <faster_whisper.transcribe.WhisperModel object at 0x00000265FAA71400>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1400, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           │    │     │      │                └ False
+           │    │     │      └  -1.39362 -1.29885 -1.30051 ... 0 0 0
+           │    │     │        [cpu:0 float32 storage viewed as 1x80x3000]
+           │    │     └ <instancemethod encode at 0x00000265AA826E60>
+           │    └ <ctranslate2._ext.Whisper object at 0x00000265FAAC0CF0>
+           └ <faster_whisper.transcribe.WhisperModel object at 0x00000265FAA71400>
+
+RuntimeError: Library cublas64_12.dll is not found or cannot be loaded
+2026-02-22 09:50:25.873 | INFO     | __main__:<module>:51 - Initializing database...
+2026-02-22 09:50:27.882 | INFO     | app.voice.stt_stream:__init__:9 - Initializing Whisper model: small on cuda
+2026-02-22 09:50:28.925 | INFO     | app.memory.embeddings:__init__:8 - Loading embedding model: all-MiniLM-L6-v2
+2026-02-22 09:50:32.349 | INFO     | app.agent.orchestrator:run:25 - Kratos Orchestrator started. Speak now.
+2026-02-22 09:50:32.350 | INFO     | app.voice.audio_stream:stream:23 - Starting microphone stream (16000 Hz)...
+2026-02-22 09:50:34.279 | ERROR    | __main__:run_voice_loop:47 - Orchestrator failed: Library cublas64_12.dll is not found or cannot be loaded
+Traceback (most recent call last):
+
+  File "D:\Kratos_Desk\app\main.py", line 60, in <module>
+    asyncio.run(run_voice_loop())
+    │       │   └ <function run_voice_loop at 0x000002875A6631A0>
+    │       └ <function run at 0x000002875C4C6A20>
+    └ <module 'asyncio' from 'C:\\Python312\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Python312\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           │      │   └ <coroutine object run_voice_loop at 0x00000287423AD0E0>
+           │      └ <function Runner.run at 0x000002875E64F2E0>
+           └ <asyncio.runners.Runner object at 0x000002874058FC80>
+  File "C:\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<run_voice_loop() running at D:\Kratos_Desk\app\main.py:47> cb=[_run_until_complete_cb() at ...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x000002875E64CF40>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x000002874058FC80>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 674, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x000002875E703CE0>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "C:\Python312\Lib\asyncio\base_events.py", line 641, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x000002875E64ECA0>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 1986, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x000002875E584EA0>
+    └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+  File "C:\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+
+> File "D:\Kratos_Desk\app\main.py", line 42, in run_voice_loop
+    await orchestrator.run()
+          │            └ <function KratosOrchestrator.run at 0x00000287167262A0>
+          └ <app.agent.orchestrator.KratosOrchestrator object at 0x0000028741072000>
+
+  File "D:\Kratos_Desk\app\agent\orchestrator.py", line 48, in run
+    text = await self.stt.transcribe_chunk(full_audio)
+                 │    │   │                └ array([ 0.0000000e+00,  0.0000000e+00, -3.0517578e-05, ...,
+                 │    │   │                         -8.9111328e-03, -8.5144043e-03, -8.0566406e-03],
+                 │    │   │                        sha...
+                 │    │   └ <function StreamingTranscriber.transcribe_chunk at 0x000002877FCEAD40>
+                 │    └ <app.voice.stt_stream.StreamingTranscriber object at 0x000002875A659EB0>
+                 └ <app.agent.orchestrator.KratosOrchestrator object at 0x0000028741072000>
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 27, in transcribe_chunk
+    segments, info = await loop.run_in_executor(
+                           │    └ <function BaseEventLoop.run_in_executor at 0x000002875E64D800>
+                           └ <ProactorEventLoop running=True closed=False debug=False>
+
+  File "C:\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │        │            └ None
+             │        └ None
+             └ None
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 29, in <lambda>
+    lambda: self.model.transcribe(audio_buffer, beam_size=5)
+            │    │     │          └ array([ 0.0000000e+00,  0.0000000e+00, -3.0517578e-05, ...,
+            │    │     │                   -8.9111328e-03, -8.5144043e-03, -8.0566406e-03],
+            │    │     │                  sha...
+            │    │     └ <function WhisperModel.transcribe at 0x0000028716557D80>
+            │    └ <faster_whisper.transcribe.WhisperModel object at 0x000002875A659FD0>
+            └ <app.voice.stt_stream.StreamingTranscriber object at 0x000002875A659EB0>
+
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 942, in transcribe
+    ) = self.detect_language(
+        │    └ <function WhisperModel.detect_language at 0x00000287165742C0>
+        └ <faster_whisper.transcribe.WhisperModel object at 0x000002875A659FD0>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1819, in detect_language
+    encoder_output = self.encode(
+                     │    └ <function WhisperModel.encode at 0x0000028716557F60>
+                     └ <faster_whisper.transcribe.WhisperModel object at 0x000002875A659FD0>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1400, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           │    │     │      │                └ False
+           │    │     │      └  -1.39362 -1.29885 -1.30051 ... 0 0 0
+           │    │     │        [cpu:0 float32 storage viewed as 1x80x3000]
+           │    │     └ <instancemethod encode at 0x000002870A3FFF40>
+           │    └ <ctranslate2._ext.Whisper object at 0x000002875A6B0B70>
+           └ <faster_whisper.transcribe.WhisperModel object at 0x000002875A659FD0>
+
+RuntimeError: Library cublas64_12.dll is not found or cannot be loaded
+2026-02-22 09:52:22.581 | INFO     | __main__:<module>:35 - Adding DLL directory: D:\Kratos_Desk\kratos_env\Lib\site-packages\nvidia\cublas\bin
+2026-02-22 09:52:22.581 | INFO     | __main__:<module>:35 - Adding DLL directory: D:\Kratos_Desk\kratos_env\Lib\site-packages\nvidia\cudnn\bin
+2026-02-22 09:52:22.582 | INFO     | __main__:<module>:58 - Initializing database...
+2026-02-22 09:52:24.600 | INFO     | app.voice.stt_stream:__init__:9 - Initializing Whisper model: small on cuda
+2026-02-22 09:52:25.604 | INFO     | app.memory.embeddings:__init__:8 - Loading embedding model: all-MiniLM-L6-v2
+2026-02-22 09:52:29.059 | INFO     | app.agent.orchestrator:run:25 - Kratos Orchestrator started. Speak now.
+2026-02-22 09:52:29.060 | INFO     | app.voice.audio_stream:stream:23 - Starting microphone stream (16000 Hz)...
+2026-02-22 09:52:30.988 | ERROR    | __main__:run_voice_loop:54 - Orchestrator failed: Library cublas64_12.dll is not found or cannot be loaded
+Traceback (most recent call last):
+
+  File "D:\Kratos_Desk\app\main.py", line 67, in <module>
+    asyncio.run(run_voice_loop())
+    │       │   └ <function run_voice_loop at 0x00000197E00639C0>
+    │       └ <function run at 0x0000019745016A20>
+    └ <module 'asyncio' from 'C:\\Python312\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Python312\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           │      │   └ <coroutine object run_voice_loop at 0x0000019728F0D620>
+           │      └ <function Runner.run at 0x00000197450F2700>
+           └ <asyncio.runners.Runner object at 0x00000197DFFD7FB0>
+  File "C:\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<run_voice_loop() running at D:\Kratos_Desk\app\main.py:54> cb=[_run_until_complete_cb() at ...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x00000197450F0360>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x00000197DFFD7FB0>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 674, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x00000197451A3100>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "C:\Python312\Lib\asyncio\base_events.py", line 641, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x00000197450F20C0>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 1986, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x0000019744FEC2C0>
+    └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+  File "C:\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+
+> File "D:\Kratos_Desk\app\main.py", line 49, in run_voice_loop
+    await orchestrator.run()
+          │            └ <function KratosOrchestrator.run at 0x000001977D1900E0>
+          └ <app.agent.orchestrator.KratosOrchestrator object at 0x000001977F3F3530>
+
+  File "D:\Kratos_Desk\app\agent\orchestrator.py", line 48, in run
+    text = await self.stt.transcribe_chunk(full_audio)
+                 │    │   │                └ array([ 0.0000000e+00,  0.0000000e+00, -3.0517578e-05, ...,
+                 │    │   │                         -4.5776367e-04, -4.5776367e-04, -4.2724609e-04],
+                 │    │   │                        sha...
+                 │    │   └ <function StreamingTranscriber.transcribe_chunk at 0x00000197759F9E40>
+                 │    └ <app.voice.stt_stream.StreamingTranscriber object at 0x0000019727132540>
+                 └ <app.agent.orchestrator.KratosOrchestrator object at 0x000001977F3F3530>
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 27, in transcribe_chunk
+    segments, info = await loop.run_in_executor(
+                           │    └ <function BaseEventLoop.run_in_executor at 0x00000197450F0C20>
+                           └ <ProactorEventLoop running=True closed=False debug=False>
+
+  File "C:\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │        │            └ None
+             │        └ None
+             └ None
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 29, in <lambda>
+    lambda: self.model.transcribe(audio_buffer, beam_size=5)
+            │    │     │          └ array([ 0.0000000e+00,  0.0000000e+00, -3.0517578e-05, ...,
+            │    │     │                   -4.5776367e-04, -4.5776367e-04, -4.2724609e-04],
+            │    │     │                  sha...
+            │    │     └ <function WhisperModel.transcribe at 0x000001977CFF7D80>
+            │    └ <faster_whisper.transcribe.WhisperModel object at 0x00000197E0059EE0>
+            └ <app.voice.stt_stream.StreamingTranscriber object at 0x0000019727132540>
+
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 942, in transcribe
+    ) = self.detect_language(
+        │    └ <function WhisperModel.detect_language at 0x000001977D0142C0>
+        └ <faster_whisper.transcribe.WhisperModel object at 0x00000197E0059EE0>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1819, in detect_language
+    encoder_output = self.encode(
+                     │    └ <function WhisperModel.encode at 0x000001977CFF7F60>
+                     └ <faster_whisper.transcribe.WhisperModel object at 0x00000197E0059EE0>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1400, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           │    │     │      │                └ False
+           │    │     │      └  -1.39362 -1.29885 -1.30051 ... 0 0 0
+           │    │     │        [cpu:0 float32 storage viewed as 1x80x3000]
+           │    │     └ <instancemethod encode at 0x0000019770E93EE0>
+           │    └ <ctranslate2._ext.Whisper object at 0x00000197276753B0>
+           └ <faster_whisper.transcribe.WhisperModel object at 0x00000197E0059EE0>
+
+RuntimeError: Library cublas64_12.dll is not found or cannot be loaded
+2026-02-22 09:53:05.071 | INFO     | __main__:<module>:35 - Adding DLL directory: D:\Kratos_Desk\kratos_env\Lib\site-packages\nvidia\cublas\bin
+2026-02-22 09:53:05.074 | INFO     | __main__:<module>:35 - Adding DLL directory: D:\Kratos_Desk\kratos_env\Lib\site-packages\nvidia\cudnn\bin
+2026-02-22 09:53:05.074 | INFO     | __main__:<module>:58 - Initializing database...
+2026-02-22 09:53:07.091 | INFO     | app.voice.stt_stream:__init__:9 - Initializing Whisper model: small on cuda
+2026-02-22 09:53:08.066 | INFO     | app.memory.embeddings:__init__:8 - Loading embedding model: all-MiniLM-L6-v2
+2026-02-22 09:53:11.573 | INFO     | app.agent.orchestrator:run:25 - Kratos Orchestrator started. Speak now.
+2026-02-22 09:53:11.573 | INFO     | app.voice.audio_stream:stream:23 - Starting microphone stream (16000 Hz)...
+2026-02-22 09:53:13.518 | ERROR    | __main__:run_voice_loop:54 - Orchestrator failed: Library cublas64_12.dll is not found or cannot be loaded
+Traceback (most recent call last):
+
+  File "D:\Kratos_Desk\app\main.py", line 67, in <module>
+    asyncio.run(run_voice_loop())
+    │       │   └ <function run_voice_loop at 0x00000272DCC039C0>
+    │       └ <function run at 0x00000272E0B1AA20>
+    └ <module 'asyncio' from 'C:\\Python312\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Python312\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           │      │   └ <coroutine object run_voice_loop at 0x00000272C496D700>
+           │      └ <function Runner.run at 0x00000272E0BF6700>
+           └ <asyncio.runners.Runner object at 0x0000027298C83E60>
+  File "C:\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<run_voice_loop() running at D:\Kratos_Desk\app\main.py:54> cb=[_run_until_complete_cb() at ...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x00000272E0BF4360>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x0000027298C83E60>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 674, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x00000272E0CA3100>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "C:\Python312\Lib\asyncio\base_events.py", line 641, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x00000272E0BF60C0>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "C:\Python312\Lib\asyncio\base_events.py", line 1986, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x00000272DF4C82C0>
+    └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+  File "C:\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...t be loaded')>)>
+
+> File "D:\Kratos_Desk\app\main.py", line 49, in run_voice_loop
+    await orchestrator.run()
+          │            └ <function KratosOrchestrator.run at 0x0000027298C9C0E0>
+          └ <app.agent.orchestrator.KratosOrchestrator object at 0x00000272C2EC7A40>
+
+  File "D:\Kratos_Desk\app\agent\orchestrator.py", line 48, in run
+    text = await self.stt.transcribe_chunk(full_audio)
+                 │    │   │                └ array([ 0.0000000e+00,  0.0000000e+00, -3.0517578e-05, ...,
+                 │    │   │                          0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
+                 │    │   │                        sha...
+                 │    │   └ <function StreamingTranscriber.transcribe_chunk at 0x0000027291461E40>
+                 │    └ <app.voice.stt_stream.StreamingTranscriber object at 0x00000272C481FB00>
+                 └ <app.agent.orchestrator.KratosOrchestrator object at 0x00000272C2EC7A40>
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 27, in transcribe_chunk
+    segments, info = await loop.run_in_executor(
+                           │    └ <function BaseEventLoop.run_in_executor at 0x00000272E0BF4C20>
+                           └ <ProactorEventLoop running=True closed=False debug=False>
+
+  File "C:\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │        │            └ None
+             │        └ None
+             └ None
+
+  File "D:\Kratos_Desk\app\voice\stt_stream.py", line 29, in <lambda>
+    lambda: self.model.transcribe(audio_buffer, beam_size=5)
+            │    │     │          └ array([ 0.0000000e+00,  0.0000000e+00, -3.0517578e-05, ...,
+            │    │     │                    0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
+            │    │     │                  sha...
+            │    │     └ <function WhisperModel.transcribe at 0x0000027298B07D80>
+            │    └ <faster_whisper.transcribe.WhisperModel object at 0x00000272DCBFDCD0>
+            └ <app.voice.stt_stream.StreamingTranscriber object at 0x00000272C481FB00>
+
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 942, in transcribe
+    ) = self.detect_language(
+        │    └ <function WhisperModel.detect_language at 0x0000027298B242C0>
+        └ <faster_whisper.transcribe.WhisperModel object at 0x00000272DCBFDCD0>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1819, in detect_language
+    encoder_output = self.encode(
+                     │    └ <function WhisperModel.encode at 0x0000027298B07F60>
+                     └ <faster_whisper.transcribe.WhisperModel object at 0x00000272DCBFDCD0>
+  File "D:\Kratos_Desk\kratos_env\Lib\site-packages\faster_whisper\transcribe.py", line 1400, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           │    │     │      │                └ False
+           │    │     │      └  -1.39362 -1.29885 -1.30051 ... 0 0 0
+           │    │     │        [cpu:0 float32 storage viewed as 1x80x3000]
+           │    │     └ <instancemethod encode at 0x000002728A2EA980>
+           │    └ <ctranslate2._ext.Whisper object at 0x0000027298CA91B0>
+           └ <faster_whisper.transcribe.WhisperModel object at 0x00000272DCBFDCD0>
+
+RuntimeError: Library cublas64_12.dll is not found or cannot be loaded
+2026-02-22 09:55:26.936 | INFO     | __main__:<module>:35 - Adding DLL directory to search path and PATH: D:\Kratos_Desk\kratos_env\Lib\site-packages\nvidia\cublas\bin
+2026-02-22 09:55:26.937 | INFO     | __main__:<module>:35 - Adding DLL directory to search path and PATH: D:\Kratos_Desk\kratos_env\Lib\site-packages\nvidia\cudnn\bin
+2026-02-22 09:55:26.937 | INFO     | __main__:<module>:59 - Initializing database...
+2026-02-22 09:55:28.953 | INFO     | app.voice.stt_stream:__init__:9 - Initializing Whisper model: small on cuda
+2026-02-22 09:55:29.981 | INFO     | app.memory.embeddings:__init__:8 - Loading embedding model: all-MiniLM-L6-v2
+2026-02-22 09:55:33.462 | INFO     | app.agent.orchestrator:run:25 - Kratos Orchestrator started. Speak now.
+2026-02-22 09:55:33.462 | INFO     | app.voice.audio_stream:stream:23 - Starting microphone stream (16000 Hz)...
+2026-02-22 09:55:37.984 | INFO     | app.agent.orchestrator:run:52 - User: Hello there.
+2026-02-22 09:56:27.872 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: "Strength is found in stillness.
+2026-02-22 09:56:27.919 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: "
+2026-02-22 09:56:32.248 | INFO     | app.agent.orchestrator:run:52 - User: Tell me about Olympus.
+2026-02-22 09:56:33.387 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Olympus is a mountain of power and deceit.
+2026-02-22 09:56:33.939 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Home to the gods who rule with an iron fist.
+2026-02-22 09:56:34.650 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  But for you, it will be a testing ground for your strength.
+2026-02-22 09:56:34.851 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Are you prepared?
+2026-02-22 09:56:36.181 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:36.969 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Strength is a choice.
+2026-02-22 09:56:37.183 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Make it yours.
+2026-02-22 09:56:37.500 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:38.226 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Your gratitude is.
+2026-02-22 09:56:38.337 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  noted.
+2026-02-22 09:56:38.644 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Focus on your own power.
+2026-02-22 09:56:38.904 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:39.683 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Strength is within you.
+2026-02-22 09:56:39.832 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Find it.
+2026-02-22 09:56:40.103 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:40.818 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Your gratitude is earned.
+2026-02-22 09:56:41.118 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Focus on the journey ahead.
+2026-02-22 09:56:41.396 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:42.074 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Strength is a choice.
+2026-02-22 09:56:42.254 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Make it yours.
+2026-02-22 09:56:42.468 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:43.221 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: You do not need thanks from me.
+2026-02-22 09:56:43.717 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  You need to stand strong in the face of adversity.
+2026-02-22 09:56:43.897 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  That is all.
+2026-02-22 09:56:44.126 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:44.736 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Your gratitude is unnecessary.
+2026-02-22 09:56:44.999 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Focus on your own path.
+2026-02-22 09:56:45.313 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  What drives you to seek strength?
+2026-02-22 09:56:45.531 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:46.153 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Strength is earned through hardship.
+2026-02-22 09:56:46.602 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  You must face your own darkness to emerge stronger.
+2026-02-22 09:56:46.916 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  What do you seek to overcome?
+2026-02-22 09:56:47.138 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:47.775 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Strength comes from within.
+2026-02-22 09:56:48.003 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Focus on your core.
+2026-02-22 09:56:48.219 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:48.783 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Your gratitude is.
+2026-02-22 09:56:48.872 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  unnecessary.
+2026-02-22 09:56:49.276 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Focus on your own strength, not mine.
+2026-02-22 09:56:49.500 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  What do you seek?
+2026-02-22 09:56:49.721 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:50.281 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: You are welcome.
+2026-02-22 09:56:50.598 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  But do not thank me yet.
+2026-02-22 09:56:50.952 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  You still have a path to walk.
+2026-02-22 09:56:51.170 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:56:51.826 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: "Strength is a choice.
+2026-02-22 09:56:51.961 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Make it.
+2026-02-22 09:56:52.006 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: "
+2026-02-22 09:57:59.623 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:58:00.239 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Strength comes from within.
+2026-02-22 09:58:00.730 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Focus on your own power, not others' praise.
+2026-02-22 09:58:00.943 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:58:01.512 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Your gratitude is.
+2026-02-22 09:58:01.606 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  unnecessary.
+2026-02-22 09:58:01.884 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  Focus on your own strength.
+2026-02-22 09:58:02.158 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking:  What burdens weigh upon you?
+2026-02-22 09:58:02.395 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:58:03.373 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: Strength is not found in gratitude, but in self-discipline.
+2026-02-22 09:58:03.591 | INFO     | app.agent.orchestrator:run:52 - User: Thank you.
+2026-02-22 09:58:04.439 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: "Your gratitude is of no consequence to me.
+2026-02-22 09:58:04.485 | INFO     | app.voice.tts_stream:speak_sentence:33 - Speaking: "
