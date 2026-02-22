@@ -1,1 +1,16 @@
 /kratos_env
+/app/__pycache__
+/app/__pycache__
+*.pyc
+*.pyc
+*.pyc
+*.pyc
+/app/llm/__pycache__
+/app/voice/__pycache__
+/tmp
+data/faiss.index
+data/faiss.index.ids
+data/kratos.log
+data/kratos.db
+cuda_check_output.txt
+check_cuda.py

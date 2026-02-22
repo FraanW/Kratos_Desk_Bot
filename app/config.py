@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     TEMPERATURE: float = 0.7
     NUM_CTX: int = 2048
     
+    # TTS Settings (Coqui XTTS)
+    XTTS_MODEL: str = "tts_models/multilingual/multi-dataset/xtts_v2"
+    SPEAKER_WAV: str = "D:/Kratos_Desk/kratos_15s_sample.wav"
+    
     # Memory & Database
     DATABASE_URL: str = f"sqlite:///{DATA_DIR}/kratos.db"
     FAISS_INDEX_PATH: str = str(DATA_DIR / "faiss.index")
@@ -33,11 +37,17 @@ class Settings(BaseSettings):
     
     # Agent Logic
     JOURNAL_COMPRESSION_THRESHOLD: int = 25
+    STOP_WORDS: list[str] = ["stop", "silence", "enough", "shut up"]
+    WAKE_WORDS: list[str] = ["kratos", "hey kratos"]
     
     class Config:
         env_file = ".env"
 
 settings = Settings()
+
+# Ensure speaker wav exists (warn if not)
+if not Path(settings.SPEAKER_WAV).exists():
+    print(f"WARNING: Speaker WAV not found at {settings.SPEAKER_WAV}")
 
 # Ensure data directory exists
 os.makedirs(settings.DATA_DIR, exist_ok=True)

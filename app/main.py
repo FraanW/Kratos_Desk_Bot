@@ -2,6 +2,38 @@ import sys
 import os
 from pathlib import Path
 
+# Add CUDA/cuDNN DLLs to search path on Windows (MUST BE DONE BEFORE OTHER IMPORTS)
+if sys.platform == "win32":
+    import importlib.util
+    
+    # DLL directories to add
+    dll_dirs = []
+    
+    # 1. nvidia packages (highly recommended for cuDNN 9 symbols)
+    for pkg in ["nvidia.cublas", "nvidia.cudnn"]:
+        spec = importlib.util.find_spec(pkg)
+        if spec and spec.submodule_search_locations:
+            pkg_path = Path(spec.submodule_search_locations[0])
+            bin_dir = pkg_path / "bin"
+            if bin_dir.exists():
+                dll_dirs.append(bin_dir)
+                
+    # 2. Torch's own DLLs as fallback
+    torch_spec = importlib.util.find_spec("torch")
+    if torch_spec and torch_spec.submodule_search_locations:
+        torch_lib = Path(torch_spec.submodule_search_locations[0]) / "lib"
+        if torch_lib.exists():
+            dll_dirs.append(torch_lib)
+
+    for ddir in dll_dirs:
+        # Use os.add_dll_directory for Python 3.8+
+        if hasattr(os, "add_dll_directory"):
+            try:
+                os.add_dll_directory(str(ddir))
+            except Exception:
+                pass
+        os.environ["PATH"] = str(ddir) + os.pathsep + os.environ["PATH"]
+
 # Fix path to allow absolute imports from the project root
 root_dir = Path(__file__).resolve().parent.parent
 if str(root_dir) not in sys.path:
@@ -13,28 +45,11 @@ from fastapi import FastAPI
 from app.core.events import lifespan
 from app.memory.database import init_db
 from app.agent.orchestrator import KratosOrchestrator
-from app.core.logger import logger
 
-# Add NVIDIA DLLs to search path on Windows
-if sys.platform == "win32":
-    import os
-    import importlib.util
-    
-    for pkg in ["nvidia.cublas", "nvidia.cudnn"]:
-        spec = importlib.util.find_spec(pkg)
-        if spec:
-            pkg_path = None
-            if spec.origin and spec.origin != 'namespace':
-                pkg_path = Path(spec.origin).parent
-            elif spec.submodule_search_locations:
-                pkg_path = Path(spec.submodule_search_locations[0])
-            
-            if pkg_path:
-                bin_dir = pkg_path / "bin"
-                if bin_dir.exists():
-                    logger.info(f"Adding DLL directory to search path and PATH: {bin_dir}")
-                    os.add_dll_directory(str(bin_dir))
-                    os.environ["PATH"] = str(bin_dir) + os.pathsep + os.environ["PATH"]
+# Automatically agree to the Coqui XTTS license (CPML)
+os.environ["COQUI_TOS_AGREED"] = "1"
+
+from app.core.logger import logger
 
 app = FastAPI(title="Kratos Desk", lifespan=lifespan)
 
@@ -49,7 +64,7 @@ async def run_voice_loop():
     try:
         await orchestrator.run()
     except KeyboardInterrupt:
-        orchestrator.stop()
+        await orchestrator.stop()
         logger.info("Kratos is resting.")
     except Exception as e:
         logger.exception("Orchestrator failed: {}", e)
